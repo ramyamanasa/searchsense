@@ -1,13 +1,7 @@
 fastapi
 uvicorn
-pandas
-numpy
-scikit-learn
-xgboost
 sentence-transformers
-faiss-cpu
-torch
-transformers
-jupyter
-matplotlib
-seaborn
+scikit-learn
+numpy
+pandas
+pydantic
