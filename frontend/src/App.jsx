@@ -49,6 +49,9 @@ export default function App() {
         });
       } catch (err) {
         console.error(err);
+        setResults([]);
+        setIntent("Backend offline — run locally to see live results");
+        setConfidence(0);
       }
       setLoading(false);
     }, 200);
