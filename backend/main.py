@@ -61,8 +61,15 @@ queries = [
     "office chair ergonomic cheap", "gaming chair ergonomic", "monitor arm desk mount",
 ]
 
-embedder = SentenceTransformer('all-MiniLM-L6-v2')
-query_embeddings = embedder.encode(queries)
+embedder = None
+query_embeddings = None
+
+def get_embedder():
+    global embedder, query_embeddings
+    if embedder is None:
+        embedder = SentenceTransformer('all-MiniLM-L6-v2')
+        query_embeddings = embedder.encode(queries)
+    return embedder, query_embeddings
 
 # Query popularity scores — simulates historical click frequency
 # In production this comes from real click logs
@@ -137,8 +144,9 @@ def predict(request: SearchRequest):
         return {"results": [], "predicted_intent": "", "confidence": 0.0}
 
     # Step 1: Semantic similarity search
-    embedding = embedder.encode([partial_query])
-    similarities = cosine_similarity(embedding, query_embeddings)[0]
+    emb, q_embeddings = get_embedder()
+    embedding = emb.encode([partial_query])
+    similarities = cosine_similarity(embedding, q_embeddings)[0]
     top_indices = similarities.argsort()[-5:][::-1]
 
     results = []
